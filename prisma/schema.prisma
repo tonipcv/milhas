@@ -1,0 +1,24 @@
+// This is your Prisma schema file
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Message {
+  id              Int      @id @default(autoincrement())
+  messageId       Int      // ID da mensagem no Telegram
+  sourceGroupId   BigInt   // ID do grupo de origem
+  sourceGroupName String   // Nome do grupo de origem
+  targetGroupId   BigInt   // ID do grupo de destino
+  targetGroupName String   // Nome do grupo de destino
+  content         String?  // Conteúdo da mensagem
+  mediaType       String?  // Tipo de mídia (photo, video, etc), se houver
+  forwardedAt     DateTime @default(now()) // Quando a mensagem foi encaminhada
+  createdAt       DateTime // Data original da mensagem
+  
+  @@unique([messageId, sourceGroupId])
+} 
